@@ -10,45 +10,51 @@
   <nav class="navbar">
     <div class="logo">Cantina Uni</div>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#" onclick="toggleMenu('loja1')">Lanchonete Central</a></li>
-      <li><a href="#" onclick="toggleMenu('loja2')">Saladas Fit</a></li>
-      <li><a href="#" onclick="toggleMenu('loja3')">Doce & Café</a></li>
+      <li><a href="#" data-loja="loja1">Lanchonete Central</a></li>
+      <li><a href="#" data-loja="loja2">Saladas Fit</a></li>
+      <li><a href="#" data-loja="loja3">Doce & Café</a></li>
     </ul>
-    <div class="menu-icon" id="menuIcon">☰</div>
+    <div class="menu-icon" id="menuIcon" aria-label="Abrir menu" tabindex="0" role="button">☰</div>
   </nav>
 
+  <!-- Barra de pesquisa -->
+  <div class="busca-container">
+    <input type="text" id="buscaInput" placeholder="Buscar item do cardápio...">
+    <button id="buscaBtn" aria-label="Buscar"><span class="lupa-icon">&#128269;</span></button>
+  </div>
+
   <main>
-    <section id="loja1" class="loja hidden">
-      <h2>Lanchonete Central</h2>
+    <section id="loja1" class="loja hidden" aria-labelledby="loja1-title">
+      <h2 id="loja1-title">Lanchonete Central</h2>
       <ul>
-        <li onclick="mostrarPreco('X-Salada - R$12,00')">X-Salada</li>
-        <li onclick="mostrarPreco('Coxinha - R$5,00')">Coxinha</li>
-        <li onclick="mostrarPreco('Suco Natural - R$6,00')">Suco Natural</li>
+        <li><button type="button" data-preco="X-Salada - R$12,00">X-Salada</button></li>
+        <li><button type="button" data-preco="Coxinha - R$5,00">Coxinha</button></li>
+        <li><button type="button" data-preco="Suco Natural - R$6,00">Suco Natural</button></li>
       </ul>
     </section>
 
-    <section id="loja2" class="loja hidden">
-      <h2>Saladas Fit</h2>
+    <section id="loja2" class="loja hidden" aria-labelledby="loja2-title">
+      <h2 id="loja2-title">Saladas Fit</h2>
       <ul>
-        <li onclick="mostrarPreco('Salada Caesar - R$15,00')">Salada Caesar</li>
-        <li onclick="mostrarPreco('Wrap Integral - R$10,00')">Wrap Integral</li>
-        <li onclick="mostrarPreco('Suco Detox - R$7,00')">Suco Detox</li>
+        <li><button type="button" data-preco="Salada Caesar - R$15,00">Salada Caesar</button></li>
+        <li><button type="button" data-preco="Wrap Integral - R$10,00">Wrap Integral</button></li>
+        <li><button type="button" data-preco="Suco Detox - R$7,00">Suco Detox</button></li>
       </ul>
     </section>
 
-    <section id="loja3" class="loja hidden">
-      <h2>Doce & Café</h2>
+    <section id="loja3" class="loja hidden" aria-labelledby="loja3-title">
+      <h2 id="loja3-title">Doce & Café</h2>
       <ul>
-        <li onclick="mostrarPreco('Brigadeiro - R$3,00')">Brigadeiro</li>
-        <li onclick="mostrarPreco('Café Expresso - R$4,00')">Café Expresso</li>
-        <li onclick="mostrarPreco('Bolo de Cenoura - R$5,00')">Bolo de Cenoura</li>
+        <li><button type="button" data-preco="Brigadeiro - R$3,00">Brigadeiro</button></li>
+        <li><button type="button" data-preco="Café Expresso - R$4,00">Café Expresso</button></li>
+        <li><button type="button" data-preco="Bolo de Cenoura - R$5,00">Bolo de Cenoura</button></li>
       </ul>
     </section>
 
-    <div id="popup" class="popup hidden">
+    <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
       <div class="popup-content">
         <span id="popupText"></span>
-        <button onclick="fecharPopup()">Fechar</button>
+        <button id="fecharPopupBtn" type="button">Fechar</button>
       </div>
     </div>
   </main>
