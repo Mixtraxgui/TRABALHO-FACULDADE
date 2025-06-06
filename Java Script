@@ -1,0 +1,18 @@
+document.getElementById("menuIcon").addEventListener("click", () => {
+  document.getElementById("navLinks").classList.toggle("active");
+});
+
+function toggleMenu(id) {
+  const lojas = document.querySelectorAll('.loja');
+  lojas.forEach(loja => loja.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function mostrarPreco(texto) {
+  document.getElementById("popupText").innerText = texto;
+  document.getElementById("popup").classList.remove("hidden");
+}
+
+function fecharPopup() {
+  document.getElementById("popup").classList.add("hidden");
+}
