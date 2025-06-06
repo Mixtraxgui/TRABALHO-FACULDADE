@@ -1,18 +1,102 @@
-document.getElementById("menuIcon").addEventListener("click", () => {
-  document.getElementById("navLinks").classList.toggle("active");
+// Menu responsivo
+const menuIcon = document.getElementById('menuIcon');
+const navLinks = document.getElementById('navLinks');
+
+menuIcon.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
 });
 
-function toggleMenu(id) {
-  const lojas = document.querySelectorAll('.loja');
-  lojas.forEach(loja => loja.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+menuIcon.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    navLinks.classList.toggle('active');
+  }
+});
+
+// Alterna as lojas
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const lojaId = link.getAttribute('data-loja');
+    mostrarLoja(lojaId);
+    navLinks.classList.remove('active');
+  });
+});
+
+function mostrarLoja(lojaId) {
+  document.querySelectorAll('.loja').forEach(section => {
+    section.classList.add('hidden');
+  });
+  const lojaSection = document.getElementById(lojaId);
+  if (lojaSection) lojaSection.classList.remove('hidden');
 }
 
+// Mostra preço dos itens
+document.querySelectorAll('.loja button[data-preco]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    mostrarPreco(btn.getAttribute('data-preco'));
+  });
+});
+
 function mostrarPreco(texto) {
-  document.getElementById("popupText").innerText = texto;
-  document.getElementById("popup").classList.remove("hidden");
+  const popup = document.getElementById('popup');
+  const popupText = document.getElementById('popupText');
+  popupText.textContent = texto;
+  popup.classList.remove('hidden');
 }
 
 function fecharPopup() {
-  document.getElementById("popup").classList.add("hidden");
+  document.getElementById('popup').classList.add('hidden');
 }
+
+document.getElementById('fecharPopupBtn').addEventListener('click', fecharPopup);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === "Escape") {
+    fecharPopup();
+  }
+});
+
+// ==== Busca no cardápio ====
+const buscaInput = document.getElementById('buscaInput');
+const buscaBtn = document.getElementById('buscaBtn');
+
+function limparDestaques() {
+  document.querySelectorAll('.loja button.destaque').forEach(el => {
+    el.classList.remove('destaque');
+  });
+}
+
+function buscarItem() {
+  const termo = buscaInput.value.trim().toLowerCase();
+  if (!termo) return;
+
+  limparDestaques();
+
+  // Busca em todos os itens do cardápio
+  let achou = false;
+  document.querySelectorAll('.loja').forEach(loja => {
+    loja.querySelectorAll('button[data-preco]').forEach(btn => {
+      if (btn.textContent.toLowerCase().includes(termo)) {
+        // Mostra a loja e destaca o item
+        mostrarLoja(loja.id);
+        btn.classList.add('destaque');
+        btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        achou = true;
+      }
+    });
+  });
+
+  if (!achou) {
+    alert('Item não encontrado no cardápio.');
+  }
+}
+
+buscaBtn.addEventListener('click', buscarItem);
+buscaInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    buscarItem();
+  }
+});
+
+// Limpa destaque ao digitar
+buscaInput.addEventListener('input', limparDestaques);
