@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cantina da Faculdade</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">Cantina Uni</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#" onclick="toggleMenu('loja1')">Lanchonete Central</a></li>
+      <li><a href="#" onclick="toggleMenu('loja2')">Saladas Fit</a></li>
+      <li><a href="#" onclick="toggleMenu('loja3')">Doce & Café</a></li>
+    </ul>
+    <div class="menu-icon" id="menuIcon">☰</div>
+  </nav>
+
+  <main>
+    <section id="loja1" class="loja hidden">
+      <h2>Lanchonete Central</h2>
+      <ul>
+        <li onclick="mostrarPreco('X-Salada - R$12,00')">X-Salada</li>
+        <li onclick="mostrarPreco('Coxinha - R$5,00')">Coxinha</li>
+        <li onclick="mostrarPreco('Suco Natural - R$6,00')">Suco Natural</li>
+      </ul>
+    </section>
+
+    <section id="loja2" class="loja hidden">
+      <h2>Saladas Fit</h2>
+      <ul>
+        <li onclick="mostrarPreco('Salada Caesar - R$15,00')">Salada Caesar</li>
+        <li onclick="mostrarPreco('Wrap Integral - R$10,00')">Wrap Integral</li>
+        <li onclick="mostrarPreco('Suco Detox - R$7,00')">Suco Detox</li>
+      </ul>
+    </section>
+
+    <section id="loja3" class="loja hidden">
+      <h2>Doce & Café</h2>
+      <ul>
+        <li onclick="mostrarPreco('Brigadeiro - R$3,00')">Brigadeiro</li>
+        <li onclick="mostrarPreco('Café Expresso - R$4,00')">Café Expresso</li>
+        <li onclick="mostrarPreco('Bolo de Cenoura - R$5,00')">Bolo de Cenoura</li>
+      </ul>
+    </section>
+
+    <div id="popup" class="popup hidden">
+      <div class="popup-content">
+        <span id="popupText"></span>
+        <button onclick="fecharPopup()">Fechar</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
