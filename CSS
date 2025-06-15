@@ -1,105 +1,264 @@
-/* ... resto do CSS existente ... */
+:root {
+  --primary: #1976d2;
+  --secondary: #fff;
+  --accent: #fbc02d;
+  --busca-bg: #f5f5f5;
+  --busca-border: #1976d2;
+  --busca-focus: #cce1fa;
+  --cart-bg: #fff;
+  --cart-border: #1976d2;
+}
 
-/* Botão de 3 pontos (menu lateral) */
-.side-menu-btn {
-  position: fixed;
-  left: 18px;
-  top: 18px;
-  z-index: 1200;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+.navbar {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 1px 6px #0002;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-}
-.side-menu-btn:focus {
-  outline: 2px solid var(--primary);
-}
-.side-menu-btn .dot {
-  width: 6px;
-  height: 6px;
-  background: #444;
-  border-radius: 50%;
-  display: block;
+  background: var(--primary);
+  color: var(--secondary);
+  padding: 0.8em 1.5em;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-/* Faixa lateral esquerda */
-.side-menu {
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  width: 220px;
-  background: #233457;
-  color: #fff;
-  z-index: 1300;
-  padding-top: 2.5em;
-  box-shadow: 2px 0 16px #0002;
-  transform: translateX(-240px);
-  transition: transform 0.3s;
+.logo {
+  font-weight: bold;
+  font-size: 1.4em;
+  letter-spacing: 1px;
 }
-.side-menu:not(.hidden) {
-  transform: translateX(0);
-}
-.side-menu ul {
+
+.nav-links {
+  display: flex;
   list-style: none;
+  gap: 1.2em;
   margin: 0;
   padding: 0;
 }
-.side-menu li {
-  margin-bottom: 1em;
-}
-.side-menu a {
-  color: #fff;
+
+.nav-links a {
+  color: var(--secondary);
   text-decoration: none;
   font-size: 1.1em;
-  padding: 0.7em 1.2em;
-  display: block;
-  border-radius: 5px;
-  transition: background 0.2s;
+  transition: color 0.2s;
+  cursor: pointer;
+  position: relative;
 }
-.side-menu a:hover {
+
+.nav-links a:hover {
+  color: var(--accent);
+}
+
+.cart-icon {
+  font-size: 1.2em;
+}
+
+.payment-icon {
+  font-size: 1.2em;
+}
+
+.cart-count {
+  background: var(--accent);
+  color: #222;
+  border-radius: 50%;
+  padding: 0 0.45em;
+  font-size: 0.95em;
+  margin-left: 0.3em;
+  vertical-align: top;
+  display: inline-block;
+  min-width: 1.2em;
+  text-align: center;
+}
+
+.menu-icon {
+  display: none;
+  font-size: 2em;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Barra de pesquisa */
+.busca-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5em auto 0 auto;
+  max-width: 600px;
+  gap: 0.5em;
+}
+
+#buscaInput {
+  flex: 1;
+  padding: 0.7em 1em;
+  font-size: 1em;
+  border: 2px solid var(--busca-border);
+  border-radius: 6px;
+  background: var(--busca-bg);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+#buscaInput:focus {
+  border-color: var(--primary);
+  background: var(--busca-focus);
+}
+
+#buscaBtn {
   background: var(--primary);
-}
-.close-side-menu {
-  position: absolute;
-  top: 0.5em;
-  right: 0.7em;
-  background: none;
   border: none;
   color: #fff;
-  font-size: 2em;
+  padding: 0.6em 1em;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 1.2em;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Modal do administrador */
-.admin-overlay {
+#buscaBtn:hover, #buscaBtn:focus {
+  background: #125498;
+}
+
+.lupa-icon {
+  pointer-events: none;
+}
+
+main {
+  max-width: 700px;
+  margin: 2em auto 0 auto;
+  padding: 1em;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px #0001;
+}
+
+.loja {
+  margin-bottom: 2em;
+  animation: fadeIn 0.5s;
+}
+
+.loja.hidden {
+  display: none;
+}
+
+.loja h2 {
+  color: var(--primary);
+  margin-bottom: 0.5em;
+}
+
+.loja ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.loja li {
+  margin-bottom: 0.8em;
+}
+
+.loja button {
+  background: var(--accent);
+  color: #222;
+  border: none;
+  border-radius: 5px;
+  padding: 0.7em 1.2em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.loja button:hover,
+.loja button:focus {
+  background: #ffe082;
+  outline: 2px solid var(--primary);
+}
+
+/* Destaque do item encontrado na busca */
+.loja button.destaque {
+  background: #fff59d !important;
+  color: #333;
+  border: 2px solid #fbc02d;
+  box-shadow: 0 0 0 3px #fffde7;
+  animation: destaqueFade 1s;
+}
+
+@keyframes destaqueFade {
+  from { box-shadow: 0 0 0 8px #ffe08288; }
+  to   { box-shadow: 0 0 0 3px #fffde7; }
+}
+
+.popup {
   position: fixed;
   inset: 0;
-  background: #0007;
+  background: #0006;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+.popup-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2em 2.5em;
+  box-shadow: 0 2px 18px #0003;
+  text-align: center;
+  min-width: 220px;
+}
+
+.popup-content button {
+  margin-top: 1.2em;
+  background: var(--primary);
+  color: var(--secondary);
+  border: none;
+  border-radius: 4px;
+  padding: 0.6em 1.6em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.popup-content button:hover,
+.popup-content button:focus {
+  background: #125498;
+  outline: 2px solid var(--accent);
+}
+
+/* Carrinho modal */
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0006;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  z-index: 1500;
+  z-index: 1001;
   overflow-y: auto;
-  padding-top: 8vh;
+  padding-top: 4vh;
 }
-.admin-overlay.hidden { display: none; }
-.admin-modal {
-  background: #fff;
-  border-radius: 12px;
-  min-width: 350px;
-  max-width: 600px;
-  box-shadow: 0 6px 30px #0003;
-  padding: 1.7em 1.5em 1.3em 1.5em;
+.cart-overlay.hidden {
+  display: none;
+}
+.cart-modal {
+  background: var(--cart-bg);
+  border-radius: 10px;
+  min-width: 330px;
+  max-width: 95vw;
+  box-shadow: 0 4px 22px #0002;
+  padding: 1.5em 1.2em 1.2em 1.2em;
   position: relative;
   animation: fadeIn 0.5s;
 }
-.admin-header {
+.cart-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -107,12 +266,12 @@
   margin-bottom: 1em;
   padding-bottom: 0.5em;
 }
-.admin-header h2 {
+.cart-header h2 {
   margin: 0;
   font-size: 1.3em;
   color: var(--primary);
 }
-#fecharAdminBtn {
+#fecharCartBtn {
   background: none;
   border: none;
   font-size: 2em;
@@ -121,32 +280,80 @@
   transition: color 0.2s;
   line-height: 1;
 }
-#fecharAdminBtn:hover { color: var(--primary); }
+#fecharCartBtn:hover { color: var(--primary); }
 
-/* Modal de acompanhamento do pedido */
-.tracking-overlay {
+.cart-footer {
+  margin-top: 1.2em;
+  border-top: 1px solid #eee;
+  padding-top: 1em;
+  text-align: right;
+  font-size: 1.1em;
+}
+
+.cart-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7em;
+  padding: 0.4em 0;
+  border-bottom: 1px solid #f3f3f3;
+}
+.cart-item-row:last-child {
+  border-bottom: none;
+}
+.cart-item-name {
+  flex: 2;
+}
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.cart-item-qty {
+  min-width: 2em;
+  text-align: center;
+  font-weight: bold;
+}
+.cart-item-remove {
+  background: none;
+  color: #d32f2f;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  margin-left: 0.3em;
+}
+.cart-empty {
+  color: #888;
+  text-align: center;
+  margin: 1.2em 0;
+}
+
+/* Pagamento modal */
+.payment-overlay {
   position: fixed;
   inset: 0;
   background: #0007;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  z-index: 1400;
+  z-index: 1100;
   overflow-y: auto;
-  padding-top: 8vh;
+  padding-top: 5vh;
 }
-.tracking-overlay.hidden { display: none; }
-.tracking-modal {
-  background: #fff;
-  border-radius: 12px;
-  min-width: 350px;
-  max-width: 600px;
+.payment-overlay.hidden {
+  display: none;
+}
+.payment-modal {
+  background: var(--cart-bg);
+  border-radius: 10px;
+  min-width: 340px;
+  max-width: 98vw;
   box-shadow: 0 6px 30px #0003;
   padding: 1.7em 1.5em 1.3em 1.5em;
   position: relative;
   animation: fadeIn 0.5s;
 }
-.tracking-header {
+.payment-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -154,12 +361,12 @@
   margin-bottom: 1em;
   padding-bottom: 0.5em;
 }
-.tracking-header h2 {
+.payment-header h2 {
   margin: 0;
   font-size: 1.3em;
   color: var(--primary);
 }
-#fecharTrackingBtn {
+#fecharPaymentBtn {
   background: none;
   border: none;
   font-size: 2em;
@@ -168,6 +375,74 @@
   transition: color 0.2s;
   line-height: 1;
 }
-#fecharTrackingBtn:hover { color: var(--primary); }
+#fecharPaymentBtn:hover { color: var(--primary); }
 
-/* ...mantenha o restante do CSS existente... */
+.payment-footer {
+  margin-top: 1.2em;
+  border-top: 1px solid #eee;
+  padding-top: 1em;
+  text-align: right;
+  font-size: 1.1em;
+}
+.payment-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.7em;
+}
+.payment-empty {
+  color: #888;
+  text-align: center;
+  margin: 1.2em 0;
+}
+.payment-success {
+  color: #388e3c;
+  background: #e8f5e9;
+  border: 1px solid #388e3c;
+  border-radius: 7px;
+  padding: 1em;
+  margin-bottom: 1em;
+  text-align: center;
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    flex-wrap: wrap;
+    padding: 0.6em 1em;
+  }
+  .nav-links {
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    background: var(--primary);
+    position: absolute;
+    top: 60px;
+    left: 0;
+    display: none;
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .nav-links li {
+    border-top: 1px solid #ffffff22;
+    padding: 0.8em 0;
+    text-align: center;
+  }
+  .menu-icon {
+    display: block;
+  }
+  .busca-container {
+    max-width: 98vw;
+    padding: 0 0.5em;
+  }
+  .cart-modal, .payment-modal {
+    min-width: 98vw;
+    padding: 1em 0.5em 0.8em 0.5em;
+  }
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to   {opacity: 1; transform: translateY(0);}
+}
