@@ -7,22 +7,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Botão de menu lateral (3 pontos) -->
-  <div id="sideMenuBtn" class="side-menu-btn" tabindex="0" aria-label="Menu lateral">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-  </div>
-
-  <!-- Faixa lateral esquerda para acessar área admin -->
-  <aside id="sideMenu" class="side-menu hidden" aria-label="Menu lateral">
-    <button id="closeSideMenu" class="close-side-menu" aria-label="Fechar menu lateral">&times;</button>
-    <ul>
-      <li><a href="#" id="adminTabBtn">Administrador</a></li>
-    </ul>
-  </aside>
-
-  <!-- Resto do conteúdo normal -->
   <nav class="navbar">
     <div class="logo">Cantina Uni</div>
     <ul class="nav-links" id="navLinks">
@@ -41,8 +25,6 @@
   </div>
 
   <main>
-    <!-- ... suas sections de lojas ... -->
-
     <section id="loja1" class="loja hidden" aria-labelledby="loja1-title">
       <h2 id="loja1-title">Lanchonete Central</h2>
       <ul>
@@ -78,7 +60,7 @@
       </div>
     </div>
 
-    <!-- Carrinho Modal -->
+    <!-- Aba do Carrinho -->
     <div id="cartOverlay" class="cart-overlay hidden" role="dialog" aria-modal="true">
       <div class="cart-modal">
         <div class="cart-header">
@@ -90,7 +72,7 @@
       </div>
     </div>
 
-    <!-- Pagamento Modal -->
+    <!-- Aba de Pagamento -->
     <div id="paymentOverlay" class="payment-overlay hidden" role="dialog" aria-modal="true">
       <div class="payment-modal">
         <div class="payment-header">
@@ -99,28 +81,6 @@
         </div>
         <div id="paymentContent"></div>
         <div id="paymentFooter" class="payment-footer"></div>
-      </div>
-    </div>
-
-    <!-- Área ADMINISTRADOR -->
-    <div id="adminOverlay" class="admin-overlay hidden" role="dialog" aria-modal="true">
-      <div class="admin-modal">
-        <div class="admin-header">
-          <h2>Administrador - Andamento dos Pedidos</h2>
-          <button id="fecharAdminBtn" aria-label="Fechar administrador">&times;</button>
-        </div>
-        <div id="adminContent"></div>
-      </div>
-    </div>
-
-    <!-- Aba de acompanhamento do cliente -->
-    <div id="trackingOverlay" class="tracking-overlay hidden" role="dialog" aria-modal="true">
-      <div class="tracking-modal">
-        <div class="tracking-header">
-          <h2>Acompanhamento do Pedido</h2>
-          <button id="fecharTrackingBtn" aria-label="Fechar acompanhamento">&times;</button>
-        </div>
-        <div id="trackingContent"></div>
       </div>
     </div>
   </main>
