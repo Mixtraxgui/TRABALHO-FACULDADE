@@ -7,54 +7,120 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Botão de menu lateral (3 pontos) -->
+  <div id="sideMenuBtn" class="side-menu-btn" tabindex="0" aria-label="Menu lateral">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <!-- Faixa lateral esquerda para acessar área admin -->
+  <aside id="sideMenu" class="side-menu hidden" aria-label="Menu lateral">
+    <button id="closeSideMenu" class="close-side-menu" aria-label="Fechar menu lateral">&times;</button>
+    <ul>
+      <li><a href="#" id="adminTabBtn">Administrador</a></li>
+    </ul>
+  </aside>
+
+  <!-- Resto do conteúdo normal -->
   <nav class="navbar">
     <div class="logo">Cantina Uni</div>
     <ul class="nav-links" id="navLinks">
       <li><a href="#" data-loja="loja1">Lanchonete Central</a></li>
       <li><a href="#" data-loja="loja2">Saladas Fit</a></li>
       <li><a href="#" data-loja="loja3">Doce & Café</a></li>
+      <li><a href="#" id="cartTabBtn"><span class="cart-icon">&#128722;</span> Carrinho <span id="cartCount" class="cart-count">0</span></a></li>
+      <li><a href="#" id="paymentTabBtn"><span class="payment-icon">&#128179;</span> Pagamento</a></li>
     </ul>
     <div class="menu-icon" id="menuIcon" aria-label="Abrir menu" tabindex="0" role="button">☰</div>
   </nav>
 
-  <!-- Barra de pesquisa -->
   <div class="busca-container">
     <input type="text" id="buscaInput" placeholder="Buscar item do cardápio...">
     <button id="buscaBtn" aria-label="Buscar"><span class="lupa-icon">&#128269;</span></button>
   </div>
 
   <main>
+    <!-- ... suas sections de lojas ... -->
+
     <section id="loja1" class="loja hidden" aria-labelledby="loja1-title">
       <h2 id="loja1-title">Lanchonete Central</h2>
       <ul>
-        <li><button type="button" data-preco="X-Salada - R$12,00">X-Salada</button></li>
-        <li><button type="button" data-preco="Coxinha - R$5,00">Coxinha</button></li>
-        <li><button type="button" data-preco="Suco Natural - R$6,00">Suco Natural</button></li>
+        <li><button type="button" data-preco="12.00" data-item="X-Salada">X-Salada</button></li>
+        <li><button type="button" data-preco="5.00" data-item="Coxinha">Coxinha</button></li>
+        <li><button type="button" data-preco="6.00" data-item="Suco Natural">Suco Natural</button></li>
       </ul>
     </section>
 
     <section id="loja2" class="loja hidden" aria-labelledby="loja2-title">
       <h2 id="loja2-title">Saladas Fit</h2>
       <ul>
-        <li><button type="button" data-preco="Salada Caesar - R$15,00">Salada Caesar</button></li>
-        <li><button type="button" data-preco="Wrap Integral - R$10,00">Wrap Integral</button></li>
-        <li><button type="button" data-preco="Suco Detox - R$7,00">Suco Detox</button></li>
+        <li><button type="button" data-preco="15.00" data-item="Salada Caesar">Salada Caesar</button></li>
+        <li><button type="button" data-preco="10.00" data-item="Wrap Integral">Wrap Integral</button></li>
+        <li><button type="button" data-preco="7.00" data-item="Suco Detox">Suco Detox</button></li>
       </ul>
     </section>
 
     <section id="loja3" class="loja hidden" aria-labelledby="loja3-title">
       <h2 id="loja3-title">Doce & Café</h2>
       <ul>
-        <li><button type="button" data-preco="Brigadeiro - R$3,00">Brigadeiro</button></li>
-        <li><button type="button" data-preco="Café Expresso - R$4,00">Café Expresso</button></li>
-        <li><button type="button" data-preco="Bolo de Cenoura - R$5,00">Bolo de Cenoura</button></li>
+        <li><button type="button" data-preco="3.00" data-item="Brigadeiro">Brigadeiro</button></li>
+        <li><button type="button" data-preco="4.00" data-item="Café Expresso">Café Expresso</button></li>
+        <li><button type="button" data-preco="5.00" data-item="Bolo de Cenoura">Bolo de Cenoura</button></li>
       </ul>
     </section>
 
     <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
       <div class="popup-content">
         <span id="popupText"></span>
+        <div id="popupActions"></div>
         <button id="fecharPopupBtn" type="button">Fechar</button>
+      </div>
+    </div>
+
+    <!-- Carrinho Modal -->
+    <div id="cartOverlay" class="cart-overlay hidden" role="dialog" aria-modal="true">
+      <div class="cart-modal">
+        <div class="cart-header">
+          <h2>Carrinho</h2>
+          <button id="fecharCartBtn" aria-label="Fechar carrinho">&times;</button>
+        </div>
+        <div id="cartContent"></div>
+        <div id="cartFooter" class="cart-footer"></div>
+      </div>
+    </div>
+
+    <!-- Pagamento Modal -->
+    <div id="paymentOverlay" class="payment-overlay hidden" role="dialog" aria-modal="true">
+      <div class="payment-modal">
+        <div class="payment-header">
+          <h2>Pagamento</h2>
+          <button id="fecharPaymentBtn" aria-label="Fechar pagamento">&times;</button>
+        </div>
+        <div id="paymentContent"></div>
+        <div id="paymentFooter" class="payment-footer"></div>
+      </div>
+    </div>
+
+    <!-- Área ADMINISTRADOR -->
+    <div id="adminOverlay" class="admin-overlay hidden" role="dialog" aria-modal="true">
+      <div class="admin-modal">
+        <div class="admin-header">
+          <h2>Administrador - Andamento dos Pedidos</h2>
+          <button id="fecharAdminBtn" aria-label="Fechar administrador">&times;</button>
+        </div>
+        <div id="adminContent"></div>
+      </div>
+    </div>
+
+    <!-- Aba de acompanhamento do cliente -->
+    <div id="trackingOverlay" class="tracking-overlay hidden" role="dialog" aria-modal="true">
+      <div class="tracking-modal">
+        <div class="tracking-header">
+          <h2>Acompanhamento do Pedido</h2>
+          <button id="fecharTrackingBtn" aria-label="Fechar acompanhamento">&times;</button>
+        </div>
+        <div id="trackingContent"></div>
       </div>
     </div>
   </main>
