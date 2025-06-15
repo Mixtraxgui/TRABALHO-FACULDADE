@@ -5,15 +5,12 @@ const navLinks = document.getElementById('navLinks');
 menuIcon.addEventListener('click', () => {
   navLinks.classList.toggle('active');
 });
-
 menuIcon.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter' || e.key === ' ') {
-    navLinks.classList.toggle('active');
-  }
+  if (e.key === 'Enter' || e.key === ' ') navLinks.classList.toggle('active');
 });
 
 // Alterna as lojas
-document.querySelectorAll('.nav-links a').forEach(link => {
+document.querySelectorAll('.nav-links a[data-loja]').forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
     const lojaId = link.getAttribute('data-loja');
@@ -21,63 +18,26 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     navLinks.classList.remove('active');
   });
 });
-
 function mostrarLoja(lojaId) {
-  document.querySelectorAll('.loja').forEach(section => {
-    section.classList.add('hidden');
-  });
+  document.querySelectorAll('.loja').forEach(section => section.classList.add('hidden'));
   const lojaSection = document.getElementById(lojaId);
   if (lojaSection) lojaSection.classList.remove('hidden');
 }
 
-// Mostra preço dos itens
-document.querySelectorAll('.loja button[data-preco]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    mostrarPreco(btn.getAttribute('data-preco'));
-  });
-});
-
-function mostrarPreco(texto) {
-  const popup = document.getElementById('popup');
-  const popupText = document.getElementById('popupText');
-  popupText.textContent = texto;
-  popup.classList.remove('hidden');
-}
-
-function fecharPopup() {
-  document.getElementById('popup').classList.add('hidden');
-}
-
-document.getElementById('fecharPopupBtn').addEventListener('click', fecharPopup);
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === "Escape") {
-    fecharPopup();
-  }
-});
-
 // ==== Busca no cardápio ====
 const buscaInput = document.getElementById('buscaInput');
 const buscaBtn = document.getElementById('buscaBtn');
-
 function limparDestaques() {
-  document.querySelectorAll('.loja button.destaque').forEach(el => {
-    el.classList.remove('destaque');
-  });
+  document.querySelectorAll('.loja button.destaque').forEach(el => el.classList.remove('destaque'));
 }
-
 function buscarItem() {
   const termo = buscaInput.value.trim().toLowerCase();
   if (!termo) return;
-
   limparDestaques();
-
-  // Busca em todos os itens do cardápio
   let achou = false;
   document.querySelectorAll('.loja').forEach(loja => {
     loja.querySelectorAll('button[data-preco]').forEach(btn => {
       if (btn.textContent.toLowerCase().includes(termo)) {
-        // Mostra a loja e destaca o item
         mostrarLoja(loja.id);
         btn.classList.add('destaque');
         btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -85,18 +45,219 @@ function buscarItem() {
       }
     });
   });
+  if (!achou) alert('Item não encontrado no cardápio.');
+}
+buscaBtn.addEventListener('click', buscarItem);
+buscaInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') buscarItem(); });
+buscaInput.addEventListener('input', limparDestaques);
 
-  if (!achou) {
-    alert('Item não encontrado no cardápio.');
-  }
+// ==== Popup e Carrinho ====
+const popup = document.getElementById('popup');
+const popupText = document.getElementById('popupText');
+const popupActions = document.getElementById('popupActions');
+const fecharPopupBtn = document.getElementById('fecharPopupBtn');
+
+// Carrinho: array de objetos { item, preco, qty }
+let carrinho = [];
+
+function atualizarCarrinhoUI() {
+  // Atualiza balão de quantidade
+  document.getElementById('cartCount').textContent = carrinho.reduce((a,b)=>a+b.qty,0);
 }
 
-buscaBtn.addEventListener('click', buscarItem);
-buscaInput.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    buscarItem();
+function adicionarAoCarrinho(nome, preco) {
+  // Se já existe, aumenta qty
+  const idx = carrinho.findIndex(i => i.item === nome && i.preco === preco);
+  if (idx > -1) carrinho[idx].qty++;
+  else carrinho.push({ item: nome, preco, qty: 1 });
+  atualizarCarrinhoUI();
+}
+
+function removerDoCarrinho(idx) {
+  carrinho.splice(idx,1);
+  atualizarCarrinhoUI();
+  renderCartContent();
+}
+
+function alterarQtdCarrinho(idx, delta) {
+  carrinho[idx].qty += delta;
+  if (carrinho[idx].qty < 1) carrinho[idx].qty = 1;
+  atualizarCarrinhoUI();
+  renderCartContent();
+}
+
+// Evento para abrir popup de cada item
+document.querySelectorAll('.loja button[data-preco]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const nome = btn.getAttribute('data-item');
+    const preco = btn.getAttribute('data-preco');
+    mostrarPopupItem(nome, preco);
+  });
+});
+
+function mostrarPopupItem(nome, preco) {
+  popupText.textContent = `${nome} - R$${Number(preco).toFixed(2).replace('.',',')}`;
+  popupActions.innerHTML = `<button id="addToCartBtn" class="add-cart-btn">Adicionar ao Carrinho</button>`;
+  popup.classList.remove('hidden');
+  document.getElementById('addToCartBtn').addEventListener('click', function() {
+    adicionarAoCarrinho(nome, Number(preco));
+    fecharPopup();
+    abrirCarrinho();
+  });
+}
+
+function mostrarPreco(texto) {
+  popupText.textContent = texto;
+  popupActions.innerHTML = '';
+  popup.classList.remove('hidden');
+}
+function fecharPopup() { popup.classList.add('hidden'); }
+fecharPopupBtn.addEventListener('click', fecharPopup);
+document.addEventListener('keydown', (e) => {
+  if (e.key === "Escape") {
+    fecharPopup();
+    fecharCarrinho();
+    fecharPayment();
   }
 });
 
-// Limpa destaque ao digitar
-buscaInput.addEventListener('input', limparDestaques);
+// ==== Carrinho Modal ====
+const cartOverlay = document.getElementById('cartOverlay');
+const cartTabBtn = document.getElementById('cartTabBtn');
+const fecharCartBtn = document.getElementById('fecharCartBtn');
+const cartContent = document.getElementById('cartContent');
+const cartFooter = document.getElementById('cartFooter');
+
+cartTabBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  abrirCarrinho();
+});
+fecharCartBtn.addEventListener('click', fecharCarrinho);
+
+function abrirCarrinho() {
+  renderCartContent();
+  cartOverlay.classList.remove('hidden');
+}
+function fecharCarrinho() {
+  cartOverlay.classList.add('hidden');
+}
+
+function renderCartContent() {
+  if (carrinho.length === 0) {
+    cartContent.innerHTML = `<div class="cart-empty">Seu carrinho está vazio.</div>`;
+    cartFooter.innerHTML = '';
+    return;
+  }
+  cartContent.innerHTML = carrinho.map((item, idx) =>
+    `<div class="cart-item-row">
+      <div class="cart-item-name">${item.item}</div>
+      <div class="cart-item-controls">
+        <button aria-label="Diminuir" onclick="alterarQtdCarrinhoUI(${idx},-1)">-</button>
+        <span class="cart-item-qty">${item.qty}</span>
+        <button aria-label="Aumentar" onclick="alterarQtdCarrinhoUI(${idx},1)">+</button>
+        <span>R$${(item.preco * item.qty).toFixed(2).replace('.',',')}</span>
+        <button class="cart-item-remove" aria-label="Remover" onclick="removerDoCarrinhoUI(${idx})">&times;</button>
+      </div>
+    </div>`
+  ).join('');
+  const total = carrinho.reduce((s, i) => s + i.preco * i.qty, 0);
+  cartFooter.innerHTML = `<strong>Total:</strong> R$${total.toFixed(2).replace('.',',')}`;
+}
+
+// Funções globais para eventos inline do carrinho (por segurança, normalmente use addEventListener)
+window.removerDoCarrinhoUI = function(idx) {
+  removerDoCarrinho(idx);
+};
+window.alterarQtdCarrinhoUI = function(idx, delta) {
+  alterarQtdCarrinho(idx, delta);
+};
+
+// ==== Pagamento Modal ====
+const paymentOverlay = document.getElementById('paymentOverlay');
+const paymentTabBtn = document.getElementById('paymentTabBtn');
+const fecharPaymentBtn = document.getElementById('fecharPaymentBtn');
+const paymentContent = document.getElementById('paymentContent');
+const paymentFooter = document.getElementById('paymentFooter');
+let pagamentoRealizado = false;
+
+paymentTabBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  abrirPagamento();
+});
+fecharPaymentBtn.addEventListener('click', fecharPayment);
+
+function abrirPagamento() {
+  renderPaymentContent();
+  paymentOverlay.classList.remove('hidden');
+}
+function fecharPayment() {
+  paymentOverlay.classList.add('hidden');
+  pagamentoRealizado = false;
+}
+
+function renderPaymentContent() {
+  if (carrinho.length === 0) {
+    paymentContent.innerHTML = `<div class="payment-empty">Seu carrinho está vazio.</div>`;
+    paymentFooter.innerHTML = '';
+    return;
+  }
+  if (pagamentoRealizado) {
+    paymentContent.innerHTML = `<div class="payment-success">Pagamento realizado com sucesso! Obrigado pela sua compra.</div>`;
+    paymentFooter.innerHTML = '';
+    carrinho = [];
+    atualizarCarrinhoUI();
+    setTimeout(() => { fecharPayment(); }, 2000);
+    return;
+  }
+  // Resumo dos itens
+  paymentContent.innerHTML = carrinho.map(item =>
+    `<div class="payment-summary-row">
+      <span>${item.qty}x ${item.item}</span>
+      <span>R$${(item.preco * item.qty).toFixed(2).replace('.',',')}</span>
+    </div>`
+  ).join('');
+  const total = carrinho.reduce((s, i) => s + i.preco * i.qty, 0);
+  paymentFooter.innerHTML = `<strong>Total a pagar:</strong> R$${total.toFixed(2).replace('.',',')}
+    <button id="finalizarPagamentoBtn" class="add-cart-btn" style="margin-left:1em;">Finalizar Pagamento</button>`;
+  setTimeout(() => {
+    const btn = document.getElementById('finalizarPagamentoBtn');
+    if (btn) btn.addEventListener('click', function() {
+      pagamentoRealizado = true;
+      renderPaymentContent();
+    });
+  }, 30);
+}
+
+// Inicializa badge do carrinho
+atualizarCarrinhoUI();
+
+function mostrarPopupItem(nome, preco) {
+  // Popup agora permite escolher quantidade e confirmar
+  popupText.textContent = `${nome} - R$${Number(preco).toFixed(2).replace('.',',')}`;
+  popupActions.innerHTML = `
+    <div style="margin:1em 0;">
+      <label for="qtyInput" style="font-size:1em;">Quantidade:</label>
+      <button type="button" id="qtyMinusBtn" style="margin-left:1em;">-</button>
+      <input type="number" id="qtyInput" min="1" value="1" style="width:3em; text-align:center; font-size:1em;">
+      <button type="button" id="qtyPlusBtn">+</button>
+    </div>
+    <button id="confirmAddToCartBtn" class="add-cart-btn">Confirmar</button>
+  `;
+  popup.classList.remove('hidden');
+
+  const qtyInput = document.getElementById('qtyInput');
+  document.getElementById('qtyMinusBtn').onclick = () => {
+    qtyInput.value = Math.max(1, parseInt(qtyInput.value, 10) - 1);
+  };
+  document.getElementById('qtyPlusBtn').onclick = () => {
+    qtyInput.value = parseInt(qtyInput.value, 10) + 1;
+  };
+  document.getElementById('confirmAddToCartBtn').onclick = function() {
+    const qtd = Math.max(1, parseInt(qtyInput.value, 10));
+    for (let i = 0; i < qtd; i++) {
+      adicionarAoCarrinho(nome, Number(preco));
+    }
+    fecharPopup();
+    // Não abre mais o carrinho automaticamente
+  };
+}
