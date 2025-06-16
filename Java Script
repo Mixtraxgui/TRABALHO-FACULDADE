@@ -59,6 +59,7 @@ const fecharPopupBtn = document.getElementById('fecharPopupBtn');
 
 // Carrinho: array de objetos { item, preco, qty }
 let carrinho = [];
+let pagamentoRealizado = false;
 
 function atualizarCarrinhoUI() {
   // Atualiza balão de quantidade
@@ -173,63 +174,7 @@ window.alterarQtdCarrinhoUI = function(idx, delta) {
 };
 
 // ==== Pagamento Modal ====
-const paymentOverlay = document.getElementById('paymentOverlay');
-const paymentTabBtn = document.getElementById('paymentTabBtn');
-const fecharPaymentBtn = document.getElementById('fecharPaymentBtn');
-const paymentContent = document.getElementById('paymentContent');
-const paymentFooter = document.getElementById('paymentFooter');
-let pagamentoRealizado = false;
-
-paymentTabBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  abrirPagamento();
-});
-fecharPaymentBtn.addEventListener('click', fecharPayment);
-
-function abrirPagamento() {
-  renderPaymentContent();
-  paymentOverlay.classList.remove('hidden');
-}
-function fecharPayment() {
-  paymentOverlay.classList.add('hidden');
-  pagamentoRealizado = false;
-}
-
-function renderPaymentContent() {
-  if (carrinho.length === 0) {
-    paymentContent.innerHTML = `<div class="payment-empty">Seu carrinho está vazio.</div>`;
-    paymentFooter.innerHTML = '';
-    return;
-  }
-  if (pagamentoRealizado) {
-    paymentContent.innerHTML = `<div class="payment-success">Pagamento realizado com sucesso! Obrigado pela sua compra.</div>`;
-    paymentFooter.innerHTML = '';
-    carrinho = [];
-    atualizarCarrinhoUI();
-    setTimeout(() => { fecharPayment(); }, 2000);
-    return;
-  }
-  // Resumo dos itens
-  paymentContent.innerHTML = carrinho.map(item =>
-    `<div class="payment-summary-row">
-      <span>${item.qty}x ${item.item}</span>
-      <span>R$${(item.preco * item.qty).toFixed(2).replace('.',',')}</span>
-    </div>`
-  ).join('');
-  const total = carrinho.reduce((s, i) => s + i.preco * i.qty, 0);
-  paymentFooter.innerHTML = `<strong>Total a pagar:</strong> R$${total.toFixed(2).replace('.',',')}
-    <button id="finalizarPagamentoBtn" class="add-cart-btn" style="margin-left:1em;">Finalizar Pagamento</button>`;
-  setTimeout(() => {
-    const btn = document.getElementById('finalizarPagamentoBtn');
-    if (btn) btn.addEventListener('click', function() {
-      pagamentoRealizado = true;
-      renderPaymentContent();
-    });
-  }, 30);
-}
-
-// Inicializa badge do carrinho
-atualizarCarrinhoUI();
+// (Removido bloco duplicado para evitar redeclaração de variáveis)
 
 function mostrarPopupItem(nome, preco) {
   // Popup agora permite escolher quantidade e confirmar
@@ -261,3 +206,303 @@ function mostrarPopupItem(nome, preco) {
     // Não abre mais o carrinho automaticamente
   };
 }
+
+// Botão de 3 pontos para abrir menu lateral
+// (declarações removidas para evitar duplicidade, eventos já adicionados abaixo)
+
+// MENU LATERAL (3 pontos)
+// (bloco removido por duplicidade)
+
+// MENU LATERAL (3 pontos)
+const sideMenuBtn = document.getElementById('sideMenuBtn');
+const sideMenu = document.getElementById('sideMenu');
+const closeSideMenu = document.getElementById('closeSideMenu');
+
+sideMenu.classList.add('hidden'); // Garante que comece fechado
+
+sideMenuBtn.addEventListener('click', () => {
+  sideMenu.classList.toggle('hidden');
+});
+sideMenuBtn.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') sideMenu.classList.toggle('hidden');
+});
+closeSideMenu.addEventListener('click', () => {
+  sideMenu.classList.add('hidden');
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === "Escape") {
+    sideMenu.classList.add('hidden');
+    fecharAdmin();
+    fecharTracking();
+    fecharPopup();
+    fecharCarrinho();
+    fecharPayment();
+  }
+});
+
+// Simples navegação entre lojas
+document.querySelectorAll('.nav-links a[data-loja]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const lojaId = link.getAttribute('data-loja');
+    mostrarLoja(lojaId);
+    navLinks.classList.remove('active');
+  });
+});
+function mostrarLoja(lojaId) {
+  document.querySelectorAll('.loja').forEach(section => section.classList.add('hidden'));
+  const lojaSection = document.getElementById(lojaId);
+  if (lojaSection) lojaSection.classList.remove('hidden');
+}
+
+// Busca no cardápio
+// (Removido bloco duplicado para evitar redeclaração de variáveis)
+
+// Popup e Carrinho
+// (Removido bloco duplicado para evitar redeclaração de variáveis)
+
+// Carrinho: array de objetos { item, preco, qty }
+// let carrinho = []; // (Removido: já declarado anteriormente)
+
+function atualizarCarrinhoUI() {
+  // Atualiza balão de quantidade
+  document.getElementById('cartCount').textContent = carrinho.reduce((a,b)=>a+b.qty,0);
+}
+
+function adicionarAoCarrinho(nome, preco) {
+  // Se já existe, aumenta qty
+  const idx = carrinho.findIndex(i => i.item === nome && i.preco === preco);
+  if (idx > -1) carrinho[idx].qty++;
+  else carrinho.push({ item: nome, preco, qty: 1 });
+  atualizarCarrinhoUI();
+}
+
+function removerDoCarrinho(idx) {
+  carrinho.splice(idx,1);
+  atualizarCarrinhoUI();
+  renderCartContent();
+}
+
+function alterarQtdCarrinho(idx, delta) {
+  carrinho[idx].qty += delta;
+  if (carrinho[idx].qty < 1) carrinho[idx].qty = 1;
+  atualizarCarrinhoUI();
+  renderCartContent();
+}
+
+document.querySelectorAll('.loja button[data-preco]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const nome = btn.getAttribute('data-item');
+    const preco = btn.getAttribute('data-preco');
+    mostrarPopupItem(nome, preco);
+  });
+});
+
+function mostrarPopupItem(nome, preco) {
+  popupText.textContent = `${nome} - R$${Number(preco).toFixed(2).replace('.',',')}`;
+  popupActions.innerHTML = `
+    <div style="margin:1em 0;">
+      <label for="qtyInput" style="font-size:1em;">Quantidade:</label>
+      <button type="button" id="qtyMinusBtn" style="margin-left:1em;">-</button>
+      <input type="number" id="qtyInput" min="1" value="1" style="width:3em; text-align:center; font-size:1em;">
+      <button type="button" id="qtyPlusBtn">+</button>
+    </div>
+    <button id="confirmAddToCartBtn" class="add-cart-btn">Confirmar</button>
+  `;
+  popup.classList.remove('hidden');
+
+  const qtyInput = document.getElementById('qtyInput');
+  document.getElementById('qtyMinusBtn').onclick = () => {
+    qtyInput.value = Math.max(1, parseInt(qtyInput.value, 10) - 1);
+  };
+  document.getElementById('qtyPlusBtn').onclick = () => {
+    qtyInput.value = parseInt(qtyInput.value, 10) + 1;
+  };
+  document.getElementById('confirmAddToCartBtn').onclick = function() {
+    const qtd = Math.max(1, parseInt(qtyInput.value, 10));
+    for (let i = 0; i < qtd; i++) {
+      adicionarAoCarrinho(nome, Number(preco));
+    }
+    fecharPopup();
+  };
+}
+
+function fecharPopup() { popup.classList.add('hidden'); }
+fecharPopupBtn.addEventListener('click', fecharPopup);
+
+// Carrinho Modal
+// (Removido bloco duplicado para evitar redeclaração de variáveis)
+
+// PEDIDOS E STATUS (memória local)
+let pedidos = []; // [{id, itens, statusMsgs: [{msg, date}], clienteId }]
+let ultimoPedidoId = 1;
+
+// ADMINISTRADOR
+const adminTabBtn = document.getElementById('adminTabBtn');
+const adminOverlay = document.getElementById('adminOverlay');
+const fecharAdminBtn = document.getElementById('fecharAdminBtn');
+const adminStatusForm = document.getElementById('adminStatusForm');
+const adminStatusList = document.getElementById('adminStatusList');
+const pedidoIdInput = document.getElementById('pedidoIdInput');
+const adminMsgInput = document.getElementById('adminMsgInput');
+
+function abrirAdmin() {
+  adminOverlay.classList.remove('hidden');
+  sideMenu.classList.add('hidden');
+  adminStatusList.innerHTML = '';
+  pedidoIdInput.value = '';
+  adminMsgInput.value = '';
+}
+function fecharAdmin() {
+  adminOverlay.classList.add('hidden');
+}
+function renderAdminStatusList(pedidoId) {
+  const pedido = pedidos.find(p => p.id === Number(pedidoId));
+  if (!pedido) {
+    adminStatusList.innerHTML = '<div style="color:#d32f2f;">Pedido não encontrado.</div>';
+    return;
+  }
+  if (!pedido.statusMsgs.length) {
+    adminStatusList.innerHTML = '<div style="color:#888;">Sem mensagens ainda.</div>';
+    return;
+  }
+  adminStatusList.innerHTML = pedido.statusMsgs.map(
+    st => `<div class="adminMsg"><b>${st.date}</b>: ${st.msg}</div>`
+  ).join('');
+}
+pedidoIdInput.addEventListener('change', function() {
+  renderAdminStatusList(this.value);
+});
+adminTabBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  abrirAdmin();
+});
+fecharAdminBtn.addEventListener('click', fecharAdmin);
+
+adminStatusForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const pedidoId = Number(pedidoIdInput.value);
+  const msg = adminMsgInput.value.trim();
+  if (!pedidoId || !msg) return;
+  let pedido = pedidos.find(p => p.id === pedidoId);
+  if (!pedido) {
+    adminStatusList.innerHTML = '<div style="color:#d32f2f;">Pedido não encontrado.</div>';
+    return;
+  }
+  const date = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  pedido.statusMsgs.push({msg, date});
+  adminMsgInput.value = '';
+  renderAdminStatusList(pedidoId);
+  if (pedidoId === clientePedidoId) atualizarTracking();
+});
+
+// ACOMPANHAMENTO DO CLIENTE
+const trackingOverlay = document.getElementById('trackingOverlay');
+const fecharTrackingBtn = document.getElementById('fecharTrackingBtn');
+const trackingContent = document.getElementById('trackingContent');
+let clientePedidoId = null;
+
+function abrirTracking(pedidoId) {
+  clientePedidoId = pedidoId;
+  atualizarTracking();
+  trackingOverlay.classList.remove('hidden');
+}
+function fecharTracking() {
+  trackingOverlay.classList.add('hidden');
+}
+fecharTrackingBtn.addEventListener('click', fecharTracking);
+
+function atualizarTracking() {
+  if (!clientePedidoId) {
+    trackingContent.innerHTML = "<div>Nenhum pedido em andamento.</div>";
+    return;
+  }
+  const pedido = pedidos.find(p => p.id === clientePedidoId);
+  if (!pedido) {
+    trackingContent.innerHTML = "<div>Pedido não encontrado.</div>";
+    return;
+  }
+  trackingContent.innerHTML = `
+    <div style="margin-bottom:1em;"><strong>Pedido #${pedido.id}</strong></div>
+    <div>Itens: ${pedido.itens.map(i=>`${i.qty}x ${i.item}`).join(', ')}</div>
+    <div style="margin:1em 0 0.7em 0;"><b>Andamento:</b></div>
+    <div>
+      ${pedido.statusMsgs.length
+        ? pedido.statusMsgs.map(st =>
+            `<div class="adminMsg"><b>${st.date}</b>: ${st.msg}</div>`
+          ).join('')
+        : '<div class="adminMsg">Aguardando atualização do estabelecimento.</div>'
+      }
+    </div>
+  `;
+}
+
+// PAGAMENTO
+const paymentOverlay = document.getElementById('paymentOverlay');
+const paymentTabBtn = document.getElementById('paymentTabBtn');
+const fecharPaymentBtn = document.getElementById('fecharPaymentBtn');
+const paymentContent = document.getElementById('paymentContent');
+const paymentFooter = document.getElementById('paymentFooter');
+
+paymentTabBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  abrirPagamento();
+});
+fecharPaymentBtn.addEventListener('click', fecharPayment);
+
+function abrirPagamento() {
+  renderPaymentContent();
+  paymentOverlay.classList.remove('hidden');
+}
+function fecharPayment() {
+  paymentOverlay.classList.add('hidden');
+  pagamentoRealizado = false; // Sempre reseta o estado ao fechar
+}
+
+function renderPaymentContent() {
+  if (carrinho.length === 0) {
+    paymentContent.innerHTML = `<div class="payment-empty">Seu carrinho está vazio.</div>`;
+    paymentFooter.innerHTML = '';
+    return;
+  }
+  if (pagamentoRealizado) {
+    // cria pedido no sistema
+    const novoPedidoId = ultimoPedidoId++;
+    pedidos.push({
+      id: novoPedidoId,
+      itens: carrinho.map(i=>({...i})),
+      statusMsgs: [],
+      clienteId: 'Visitante'
+    });
+    atualizarCarrinhoUI();
+    paymentContent.innerHTML = `<div class="payment-success">Pagamento realizado com sucesso! Obrigado pela sua compra.<br>Você será direcionado para o acompanhamento do pedido.</div>`;
+    paymentFooter.innerHTML = '';
+    carrinho = [];
+    setTimeout(() => {
+      fecharPayment();
+      abrirTracking(novoPedidoId);
+    }, 2000);
+    return;
+  }
+  paymentContent.innerHTML = carrinho.map(item =>
+    `<div class="payment-summary-row">
+      <span>${item.qty}x ${item.item}</span>
+      <span>R$${(item.preco * item.qty).toFixed(2).replace('.',',')}</span>
+    </div>`
+  ).join('');
+  const total = carrinho.reduce((s, i) => s + i.preco * i.qty, 0);
+  paymentFooter.innerHTML = `<strong>Total a pagar:</strong> R$${total.toFixed(2).replace('.',',')}
+    <button id="finalizarPagamentoBtn" class="add-cart-btn" style="margin-left:1em;">Finalizar Pagamento</button>`;
+  setTimeout(() => {
+    const btn = document.getElementById('finalizarPagamentoBtn');
+    if (btn) btn.addEventListener('click', function() {
+      pagamentoRealizado = true;
+      renderPaymentContent();
+    });
+  }, 30);
+}
+
+// Badge carrinho
+atualizarCarrinhoUI();
+
+// ...MANTENHA O RESTANTE DO SCRIPT (carrinho, busca, admin, acompanhamento, pagamento etc) IGUAL já enviado anteriormente...
