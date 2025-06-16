@@ -446,3 +446,479 @@ main {
   from {opacity: 0; transform: translateY(10px);}
   to   {opacity: 1; transform: translateY(0);}
 }
+
+/* ... mantenha o CSS anterior ... */
+
+/* Botão de 3 pontos (ajustado mais para baixo) */
+.side-menu-btn {
+  position: fixed;
+  left: 18px;
+  top: 60px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 6px #0002;
+  align-items: center;
+  justify-content: center;
+}
+.side-menu-btn:focus {
+  outline: 2px solid var(--primary);
+}
+.side-menu-btn .dot {
+  width: 6px;
+  height: 6px;
+  background: #444;
+  border-radius: 50%;
+  display: block;
+}
+
+/* ... restante do CSS igual ... */
+
+/* ADMIN overlay */
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0007;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1500;
+  overflow-y: auto;
+  padding-top: 8vh;
+}
+.admin-overlay.hidden { display: none; }
+.admin-modal {
+  background: #fff;
+  border-radius: 12px;
+  min-width: 350px;
+  max-width: 600px;
+  box-shadow: 0 6px 30px #0003;
+  padding: 1.7em 1.5em 1.3em 1.5em;
+  position: relative;
+  animation: fadeIn 0.5s;
+}
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+}
+.admin-header h2 {
+  margin: 0;
+  font-size: 1.3em;
+  color: var(--primary);
+}
+#fecharAdminBtn {
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+#fecharAdminBtn:hover { color: var(--primary); }
+#adminStatusForm {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-bottom: .5em;
+}
+#adminStatusForm label { font-size: 1em; }
+#adminStatusForm input[type="text"] { padding: 0.3em; }
+#adminStatusForm input[type="number"] { padding: 0.3em; }
+#adminStatusForm button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5em 1.3em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#adminStatusForm button:hover { background: #125498; }
+#adminStatusList {
+  font-size: 0.97em;
+  color: #222;
+}
+.adminMsg {
+  margin: 0.3em 0;
+  padding: 0.4em 0.8em;
+  background: #f5f5f5;
+  border-radius: 5px;
+}
+
+/* ... mantenha o restante do CSS ... */
+
+.side-menu {
+  /* ...outras regras... */
+  display: none;
+  /* ... */
+}
+.side-menu:not(.hidden) {
+  display: block;
+  /* ... */
+}
+
+.side-menu {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 220px;
+  background: #233457;
+  color: #fff;
+  z-index: 1300;
+  padding-top: 2.5em;
+  box-shadow: 2px 0 16px #0002;
+  display: none;
+}
+.side-menu:not(.hidden) {
+  display: block;
+}
+.hidden {
+  display: none !important;
+}
+.side-menu-btn {
+  position: fixed;
+  left: 18px;
+  top: 60px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 6px #0002;
+  align-items: center;
+  justify-content: center;
+}
+.side-menu-btn .dot {
+  width: 6px;
+  height: 6px;
+  background: #444;
+  border-radius: 50%;
+  display: block;
+}
+
+:root {
+  --primary: #1976d2;
+  --secondary: #fff;
+  --accent: #fbc02d;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+/* Botão de 3 pontos (ajustado mais para baixo) */
+.side-menu-btn {
+  position: fixed;
+  left: 18px;
+  top: 60px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 6px #0002;
+  align-items: center;
+  justify-content: center;
+}
+.side-menu-btn:focus {
+  outline: 2px solid var(--primary);
+}
+.side-menu-btn .dot {
+  width: 6px;
+  height: 6px;
+  background: #444;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Faixa lateral esquerda */
+.side-menu {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 220px;
+  background: #233457;
+  color: #fff;
+  z-index: 1300;
+  padding-top: 2.5em;
+  box-shadow: 2px 0 16px #0002;
+  transform: translateX(-250px);
+  transition: transform 0.3s;
+  display: block;
+}
+.side-menu:not(.hidden) {
+  transform: translateX(0);
+}
+.side-menu.hidden {
+  transform: translateX(-250px);
+}
+.side-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.side-menu li {
+  margin-bottom: 1em;
+}
+.side-menu a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1em;
+  padding: 0.7em 1.2em;
+  display: block;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+.side-menu a:hover {
+  background: var(--primary);
+}
+.close-side-menu {
+  position: absolute;
+  top: 0.5em;
+  right: 0.7em;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+}
+
+:root {
+  --primary: #1976d2;
+  --secondary: #fff;
+  --accent: #fbc02d;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+/* Botão de 3 pontos */
+.side-menu-btn {
+  position: fixed;
+  left: 18px;
+  top: 60px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 6px #0002;
+  align-items: center;
+  justify-content: center;
+}
+.side-menu-btn:focus {
+  outline: 2px solid var(--primary);
+}
+.side-menu-btn .dot {
+  width: 6px;
+  height: 6px;
+  background: #444;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Faixa lateral esquerda */
+.side-menu {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 220px;
+  background: #233457;
+  color: #fff;
+  z-index: 1300;
+  padding-top: 2.5em;
+  box-shadow: 2px 0 16px #0002;
+  transform: translateX(-250px);
+  transition: transform 0.3s;
+  display: block;
+}
+.side-menu:not(.hidden) {
+  transform: translateX(0);
+}
+.side-menu.hidden {
+  transform: translateX(-250px);
+}
+.side-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.side-menu li {
+  margin-bottom: 1em;
+}
+.side-menu a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.1em;
+  padding: 0.7em 1.2em;
+  display: block;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+.side-menu a:hover {
+  background: var(--primary);
+}
+.close-side-menu {
+  position: absolute;
+  top: 0.5em;
+  right: 0.7em;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+}
+
+/* ADMIN overlay */
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0007;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1500;
+  overflow-y: auto;
+  padding-top: 8vh;
+}
+.admin-overlay.hidden { display: none; }
+.admin-modal {
+  background: #fff;
+  border-radius: 12px;
+  min-width: 350px;
+  max-width: 600px;
+  box-shadow: 0 6px 30px #0003;
+  padding: 1.7em 1.5em 1.3em 1.5em;
+  position: relative;
+  animation: fadeIn 0.5s;
+}
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+}
+.admin-header h2 {
+  margin: 0;
+  font-size: 1.3em;
+  color: var(--primary);
+}
+#fecharAdminBtn {
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+#fecharAdminBtn:hover { color: var(--primary); }
+#adminStatusForm {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-bottom: .5em;
+}
+#adminStatusForm label { font-size: 1em; }
+#adminStatusForm input[type="text"] { padding: 0.3em; }
+#adminStatusForm input[type="number"] { padding: 0.3em; }
+#adminStatusForm button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5em 1.3em;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#adminStatusForm button:hover { background: #125498; }
+#adminStatusList {
+  font-size: 0.97em;
+  color: #222;
+}
+.adminMsg {
+  margin: 0.3em 0;
+  padding: 0.4em 0.8em;
+  background: #f5f5f5;
+  border-radius: 5px;
+}
+
+/* Modal de acompanhamento do pedido */
+.tracking-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0007;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1400;
+  overflow-y: auto;
+  padding-top: 8vh;
+}
+.tracking-overlay.hidden { display: none; }
+.tracking-modal {
+  background: #fff;
+  border-radius: 12px;
+  min-width: 350px;
+  max-width: 600px;
+  box-shadow: 0 6px 30px #0003;
+  padding: 1.7em 1.5em 1.3em 1.5em;
+  position: relative;
+  animation: fadeIn 0.5s;
+}
+.tracking-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+}
+.tracking-header h2 {
+  margin: 0;
+  font-size: 1.3em;
+  color: var(--primary);
+}
+#fecharTrackingBtn {
+  background: none;
+  border: none;
+  font-size: 2em;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+#fecharTrackingBtn:hover { color: var(--primary); }
+
+/* Demais estilos para popup, carrinho, navbar, busca, etc, podem ser mantidos do seu projeto anterior. */
+/* Resto do CSS igual ao anterior (navbar, busca, lojas, modais etc) */
+/* ...mantenha o restante do CSS já enviado para o visual do site... */
